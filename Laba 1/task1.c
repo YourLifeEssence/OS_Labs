@@ -37,7 +37,15 @@ void task1(int argc, char* argv[]) {
     unsigned char byte;
     while (fread(&byte,sizeof(unsigned char),1,f)) {
         printf("%u : %p, %d, %p, %d, %d, %d, %d, %p\n",
-            byte,f->_ptr,f->_cnt,f->_base,f->_flag,f->_file,f->_charbuf,f->_bufsiz,f->_tmpfname);
+            byte,
+            f->_ptr,
+            f->_cnt,
+            f->_base,
+            f->_flag,
+            f->_file,
+            f->_charbuf,
+            f->_bufsiz,
+            f->_tmpfname);
     }
     printf("\n");
     fclose(f);

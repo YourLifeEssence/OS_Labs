@@ -24,7 +24,7 @@ int main(int argc, char* argv[]) {
                 [byte[]]$bytes = 0x12,0xAF,0x34,0x56,0x7E,0x01,0xB3,0xCD,0x08,0x9F,0x44,0x55,0x23,0xE1,0x6A,0xFF
 
                 Запись в бинарный файл
-                [IO.File]::WriteAllBytes("C:\All My Storage\Development\Projects\Labs\fileDest1.bin", $bytes)
+                [IO.File]::WriteAllBytes("C:\All My Storage\Development\Projects\Labs\fileSource4.bin", $bytes)
             */
             task4(argc, argv);
             break;
