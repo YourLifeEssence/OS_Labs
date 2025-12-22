@@ -20,8 +20,13 @@ int task4(int argc, char *argv[]) {
         }
         unsigned char result = 0;
         unsigned char buf = 0;
-        while(fread(&buf,sizeof(unsigned char),1,f)) {
+        while(fread(&buf,sizeof(unsigned char),1,f) == 1) {
             result ^= buf;
+        }
+        if (ferror(f)) {
+            fprintf(stderr, "Read error\n");
+            fclose(f);
+            return 1;
         }
         printf("%02X\n", result);
         fclose(f);
@@ -60,7 +65,7 @@ int task4(int argc, char *argv[]) {
         fclose(f);
     } else if(strcmp(flag, "mask") == 0) {
         if (argc < 4) {
-            fprintf(stderr, "Usage: program <file> mask <hex>\n");
+            fprintf(stderr, "Error\t->\tUsage: program <file> mask <hex>\n");
             return 1;
         }
         f = fopen(fileName, "rb");

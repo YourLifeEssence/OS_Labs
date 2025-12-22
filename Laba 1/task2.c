@@ -24,7 +24,7 @@ void task2() {
                 printf("Не удалось авторизоваться\n");
             }
         } else if (strcmp(buf, "3") == 0 || strcasecmp(buf, "Exit") == 0) {
-            printf("Выход из программы. Пока!\n");
+            printf("Выход из программы\n");
             break;
         } else {
             printf("Неверный выбор\n");
@@ -157,8 +157,8 @@ void handle_howmuch(const char* datetime_str, const char* flag) {
     }
 }
 
-void read_line(char* buf, size_t sz) {
-    if (!fgets(buf, (int)sz, stdin)) {
+void read_line(char* buf, size_t maxSize) {
+    if (!fgets(buf, (int)maxSize, stdin)) {
         buf[0] = '\0';
         return;
     }
@@ -213,7 +213,7 @@ void registration_flow(TrieNode* root) {
     if (trie_insert(root, login, pin)) {
         printf("Регистрация успешна. Можете войти под логином '%s'\n", login);
     } else {
-        printf("Ошибка регистрации (возможно, логин уже существует)\n");
+        printf("Ошибка регистрации\n");
     }
 }
 
@@ -262,7 +262,7 @@ void session_loop(TrieNode* root, const char* login) {
     char line[512];
     while (1) {
         if (node->is_limited && sanction_limit >= 0 && session_cmd_count >= sanction_limit) {
-            printf("Достигнут лимит команд в сеансе (санкция). Выполните Logout для выхода.\n");
+            printf("Достигнут лимит команд в сеансе. Выполните Logout для выхода.\n");
             // Ждём только Logout
             printf("%s> ", login);
             read_line(line, sizeof(line));
@@ -276,7 +276,7 @@ void session_loop(TrieNode* root, const char* login) {
                 printf("Выход...\n");
                 return;
             } else {
-                printf("Запрещено выполнять команды (санкция). Введите Logout, чтобы выйти.\n");
+                printf("Запрещено выполнять команды. Введите Logout, чтобы выйти.\n");
                 continue;
             }
         }
@@ -292,31 +292,24 @@ void session_loop(TrieNode* root, const char* login) {
         int tcnt = tokenize(tmp, tokens, MAX_TOKENS);
         if (tcnt == 0) continue;
 
-        // Команда Logout
         if (strcasecmp(tokens[0], "Logout") == 0) {
             printf("Выход из сессии...\n");
             return;
         }
 
-        // Команда Time
         if (strcasecmp(tokens[0], "Time") == 0) {
             print_time_now();
             session_cmd_count++;
             continue;
         }
 
-        // Команда Date
         if (strcasecmp(tokens[0], "Date") == 0) {
             print_date_now();
             session_cmd_count++;
             continue;
         }
 
-        // Howmuch: требует как минимум 3 токена: Howmuch <date> <time> <flag>
-        // Но мы принимаем имя параметра datetime как одно поле "дд:MM:гггг чч:мм:сс".
         if (strcasecmp(tokens[0], "Howmuch") == 0) {
-            // Варианты ввода: Howmuch дд:MM:гггг чч:мм:сс -s
-            // Токены: tokens[1] = дата, tokens[2] = время, tokens[3] = flag
             if (tcnt < 4) {
                 printf("Usage: Howmuch дд:MM:гггг чч:мм:сс <flag>\n");
             } else {
@@ -328,7 +321,6 @@ void session_loop(TrieNode* root, const char* login) {
             continue;
         }
 
-        // Sanctions <username>
         if (strcasecmp(tokens[0], "Sanctions") == 0) {
             if (tcnt < 2) {
                 printf("Usage: Sanctions <username>\n");
@@ -370,6 +362,5 @@ void free_trie(TrieNode* node) {
             free_trie(node->children[i]);
         }
     }
-
     free(node);
 }
